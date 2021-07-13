@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -26,11 +27,11 @@ public class CamelApplication {
         SpringApplication.run(CamelApplication.class, args);
     }
 
-//    @Bean
-//    public Tracer tracer(@Value("${JAEGER_SERVICE_NAME:${spring.application.name}}") String serviceName) {
-//        OpenTracingTracer answer = new OpenTracingTracer();
-//        answer.setTracer(Configuration.fromEnv(serviceName).getTracer());
-//
-//        return answer;
-//    }
+    @Bean
+    public Tracer tracer(@Value("${JAEGER_SERVICE_NAME:${spring.application.name}}") String serviceName) {
+        OpenTracingTracer answer = new OpenTracingTracer();
+        answer.setTracer(Configuration.fromEnv(serviceName).getTracer());
+
+        return answer;
+    }
 }

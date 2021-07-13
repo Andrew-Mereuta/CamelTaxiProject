@@ -112,8 +112,12 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
         from(direct("get-clients"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-clients'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+                .routeId("direct:get-clients")
+                .to(sql("classpath:select-clients.sql"))
+                .transform(datasonnet("payload", String.class))
+
+//            .setBody(DatasonnetExpression.builder("{opId: 'get-clients'}", String.class)
+//                    .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
         from(direct("get-cars"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)
