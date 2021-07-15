@@ -1,0 +1,15 @@
+/** DataSonnet
+version=2.0
+output application/json
+input payload application/json
+*/
+local nullOrValue(param) =
+    if(param in payload) then
+        payload[param]
+    else
+        null;
+
+{
+	driver: nullOrValue('driver'),
+	car: nullOrValue('car')
+}

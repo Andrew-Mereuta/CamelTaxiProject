@@ -1,0 +1,18 @@
+/** DataSonnet
+version=2.0
+output application/json
+input payload application/json
+*/
+local nullOrValue(param) =
+    if(param in payload) then
+        payload[param]
+    else
+        null;
+
+{
+	client_id: nullOrValue('client_id'),
+	name: nullOrValue('name'),
+	password: nullOrValue('password'),
+	email: nullOrValue('email'),
+	role: nullOrValue('role')
+}
