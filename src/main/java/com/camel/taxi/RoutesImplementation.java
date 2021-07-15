@@ -37,17 +37,20 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'patch-orders-orderId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("get-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-drivers-driverId")
+            .to(direct("get-driver-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("put-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-drivers-driverId")
+            .to(direct("update-driver-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("delete-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-drivers-driverId")
+            .to(direct("delete-driver-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("get-clients-clientId"))
@@ -101,9 +104,10 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'post-orders'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("get-drivers"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-drivers'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-drivers")
+            .to(direct("get-all-drivers").getUri())
         ;
         from(direct("get-test"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-test'}", String.class)
