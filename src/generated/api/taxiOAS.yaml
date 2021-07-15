@@ -416,7 +416,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
+              anyOf:
                 - $ref: '#/components/schemas/Client-register'
                 - $ref: '#/components/schemas/Driver-register'
         required: true

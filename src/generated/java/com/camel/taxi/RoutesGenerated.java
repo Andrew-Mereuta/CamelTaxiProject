@@ -35,6 +35,7 @@ public class RoutesGenerated extends BaseRestRouteBuilder {
 
         restConfiguration().component("undertow");
 
+        //TEMPORARY
         interceptFrom()
             .process(new OpenApi4jValidator("taxiOAS.yaml", contextPath));
 

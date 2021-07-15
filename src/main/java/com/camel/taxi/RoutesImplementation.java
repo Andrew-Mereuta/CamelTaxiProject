@@ -1,7 +1,10 @@
 package com.camel.taxi;
 
 import com.datasonnet.document.MediaTypes;
+import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
+import org.apache.camel.Message;
+import org.apache.camel.Processor;
 import org.apache.camel.language.datasonnet.DatasonnetExpression;
 import org.springframework.stereotype.Component;
 
@@ -76,12 +79,19 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
         from(direct("post-register"))
-//            .routeId("direct:post-register")
+                .routeId("direct:post-register")
+                .choice()
+                    .when(simple("${header.who} == 'driver'"))
+                        .to(direct("register-driver").getUri())
+                    .otherwise()
+                        .to(direct("register-client").getUri());
+
+
 //            .log(LoggingLevel.INFO, "Start of ${routeId}")
 //            .
 
-            .setBody(DatasonnetExpression.builder("{opId: 'post-register'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+//            .setBody(DatasonnetExpression.builder("{opId: 'post-register'}", String.class)
+//                    .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
         from(direct("post-login"))
             .setBody(DatasonnetExpression.builder("{opId: 'post-login'}", String.class)
@@ -111,13 +121,11 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'get-orders-clients-clientId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // testing endpoint
         from(direct("get-clients"))
                 .routeId("direct:get-clients")
                 .to(sql("classpath:select-clients.sql"))
                 .transform(datasonnet("payload", String.class))
-
-//            .setBody(DatasonnetExpression.builder("{opId: 'get-clients'}", String.class)
-//                    .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
         from(direct("get-cars"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)
