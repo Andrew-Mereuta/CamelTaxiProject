@@ -21,7 +21,6 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
     public void configure() throws Exception {
         super.configure();
 
-        // TODO: Replace stubs for each endpoint with real implementation. Implementation defaults to a simple response with operation Id.
         from(direct("get-orders-orderId"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-orders-orderId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
@@ -50,17 +49,20 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'delete-drivers-driverId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
-        from(direct("get-clients-clientId")) // TODO: implement get client by id
+        // IMPLEMENTED
+        from(direct("get-clients-clientId"))
             .routeId("direct:get-clients-clientId")
             .to(direct("get-client-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("put-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-clients-clientsId")
+            .to(direct("put-client-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("delete-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-clients-clientId")
+            .to(direct("delete-client-by-id").getUri())
         ;
         from(direct("get-cars-carId"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars-carId'}", String.class)
@@ -78,6 +80,7 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'patch-cars-carId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("post-register"))
                 .routeId("direct:post-register")
                 .choice()
@@ -114,11 +117,10 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'get-orders-clients-clientId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
-        // testing endpoint
+        // IMPLEMENTED
         from(direct("get-clients"))
                 .routeId("direct:get-clients")
-                .to(sql("classpath:/client/select-clients.sql"))
-                .transform(datasonnet("payload[0]", String.class))
+                .to(direct("retrieve-all-clients").getUri())
         ;
         from(direct("get-cars"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)

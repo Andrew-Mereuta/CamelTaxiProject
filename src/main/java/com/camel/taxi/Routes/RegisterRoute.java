@@ -25,12 +25,9 @@ public class RegisterRoute extends BaseRestRouteBuilder {
                 .setProperty("email", datasonnetEx("payload.email", String.class))
                 .setProperty("password", datasonnetEx("payload.password", String.class))
                 .log(LoggingLevel.INFO, "${body}")
-                .to(sql("classpath:/client/insert-client.sql"))
+                .to(sql("classpath:/sql/client/insert-client.sql"))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(201))
                 .setBody(constant(StringUtils.EMPTY))
-//                .transform(datasonnetEx("resource:classpath:client.ds", String.class)
-//                        .bodyMediaType(MediaTypes.APPLICATION_JAVA)
-//                        .outputMediaType(MediaTypes.APPLICATION_JSON))
                 ;
 
         from(direct("register-driver"))
@@ -42,13 +39,13 @@ public class RegisterRoute extends BaseRestRouteBuilder {
                 .setProperty("model", datasonnetEx("payload.car.model", String.class))
                 .log(LoggingLevel.INFO, "${body}")
                 .setHeader("CamelSqlRetrieveGeneratedKeys", constant(true))
-                .to(sql("classpath:/driver/insert-driver.sql")) // here I insert driver into db, now I need to get his id, and put it to the property, so that I can insert car into db
+                .to(sql("classpath:/sql/driver/insert-driver.sql")) // here I insert driver into db, now I need to get his id, and put it to the property, so that I can insert car into db
                 .setProperty("driverId", simple("${headers.CamelSqlGeneratedKeyRows[0]['GENERATED_KEY']}"))
                 .to(direct("register-car").getUri());
 
         from(direct("register-car"))
                 .routeId("direct:register-car")
-                .to(sql("classpath:/car/insert-car.sql"))
+                .to(sql("classpath:/sql/car/insert-car.sql"))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(201))
                 .setBody(constant(StringUtils.EMPTY));
 

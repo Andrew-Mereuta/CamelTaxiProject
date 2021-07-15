@@ -1,1 +1,0 @@
-SELECT client_id, email, name FROM client;

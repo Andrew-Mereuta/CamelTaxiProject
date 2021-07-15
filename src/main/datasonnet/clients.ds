@@ -2,4 +2,4 @@ ds.map(payload, function(client) {
     name : client.name,
     email : client.email,
     role : client.role
-})[0]
+})
