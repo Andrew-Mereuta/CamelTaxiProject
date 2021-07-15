@@ -50,9 +50,9 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'delete-drivers-driverId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
-        from(direct("get-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+        from(direct("get-clients-clientId")) // TODO: implement get client by id
+            .routeId("direct:get-clients-clientId")
+            .to(direct("get-client-by-id").getUri())
         ;
         from(direct("put-clients-clientId"))
             .setBody(DatasonnetExpression.builder("{opId: 'put-clients-clientId'}", String.class)
@@ -84,14 +84,7 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
                     .when(simple("${header.who} == 'driver'"))
                         .to(direct("register-driver").getUri())
                     .otherwise()
-                        .to(direct("register-client").getUri());
-
-
-//            .log(LoggingLevel.INFO, "Start of ${routeId}")
-//            .
-
-//            .setBody(DatasonnetExpression.builder("{opId: 'post-register'}", String.class)
-//                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+                        .to(direct("register-client").getUri())
         ;
         from(direct("post-login"))
             .setBody(DatasonnetExpression.builder("{opId: 'post-login'}", String.class)
@@ -124,8 +117,8 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // testing endpoint
         from(direct("get-clients"))
                 .routeId("direct:get-clients")
-                .to(sql("classpath:select-clients.sql"))
-                .transform(datasonnet("payload", String.class))
+                .to(sql("classpath:/client/select-clients.sql"))
+                .transform(datasonnet("payload[0]", String.class))
         ;
         from(direct("get-cars"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)

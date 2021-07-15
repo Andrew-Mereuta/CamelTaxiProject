@@ -33,7 +33,6 @@ public class RegisterRoute extends BaseRestRouteBuilder {
 //                        .outputMediaType(MediaTypes.APPLICATION_JSON))
                 ;
 
-        // TODO
         from(direct("register-driver"))
                 .routeId("direct:register-driver")
                 .transform(datasonnetEx("resource:classpath:create-driver-payload.ds", String.class))
@@ -45,20 +44,13 @@ public class RegisterRoute extends BaseRestRouteBuilder {
                 .setHeader("CamelSqlRetrieveGeneratedKeys", constant(true))
                 .to(sql("classpath:/driver/insert-driver.sql")) // here I insert driver into db, now I need to get his id, and put it to the property, so that I can insert car into db
                 .setProperty("driverId", simple("${headers.CamelSqlGeneratedKeyRows[0]['GENERATED_KEY']}"))
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        Map<String, Object> properties = exchange.getProperties();
-                    }
-                })
+                .to(direct("register-car").getUri());
+
+        from(direct("register-car"))
+                .routeId("direct:register-car")
                 .to(sql("classpath:/car/insert-car.sql"))
-                .process(new Processor() {
-                    @Override
-                    public void process(Exchange exchange) throws Exception {
-                        Map<String, Object> properties = exchange.getProperties();
-                    }
-                })
-                ;
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(201))
+                .setBody(constant(StringUtils.EMPTY));
 
 
     }
