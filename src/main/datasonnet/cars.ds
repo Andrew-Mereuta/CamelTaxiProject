@@ -1,0 +1,5 @@
+ds.map(payload, function(car) {
+    model : car.model,
+    'driver-email' : car["driver-email"],
+    'driver-name' : car["driver-name"]
+})

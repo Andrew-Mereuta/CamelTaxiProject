@@ -67,25 +67,25 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .routeId("direct:delete-clients-clientId")
             .to(direct("delete-client-by-id").getUri())
         ;
-        // TODO: implement
+        // IMPLEMENTED
         from(direct("get-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-cars-carId")
+            .to(direct("get-car-by-id").getUri())
         ;
-        // TODO: implement
+        // IMPLEMENTED
         from(direct("put-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-cars-carId")
+            .to(direct("update-car-by-id").getUri())
         ;
-        // TODO: implement
+        // IMPLEMENTED
         from(direct("delete-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-cars-carId")
+            .to(direct("delete-car-by-id").getUri())
         ;
-        // TODO: implement
+        // IMPLEMENTED
         from(direct("patch-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'patch-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:patch-cars-carId")
+            .to(direct("patch-car-by-id"))
         ;
         // IMPLEMENTED
         from(direct("post-register"))
@@ -130,10 +130,10 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
                 .routeId("direct:get-clients")
                 .to(direct("retrieve-all-clients").getUri())
         ;
-        // TODO: implement
+        // IMPLEMENTED
         from(direct("get-cars"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-cars")
+            .to(direct("get-all-cars").getUri())
         ;
 
     }
