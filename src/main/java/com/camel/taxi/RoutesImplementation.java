@@ -67,18 +67,22 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .routeId("direct:delete-clients-clientId")
             .to(direct("delete-client-by-id").getUri())
         ;
+        // TODO: implement
         from(direct("get-cars-carId"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars-carId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // TODO: implement
         from(direct("put-cars-carId"))
             .setBody(DatasonnetExpression.builder("{opId: 'put-cars-carId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // TODO: implement
         from(direct("delete-cars-carId"))
             .setBody(DatasonnetExpression.builder("{opId: 'delete-cars-carId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // TODO: implement
         from(direct("patch-cars-carId"))
             .setBody(DatasonnetExpression.builder("{opId: 'patch-cars-carId'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
@@ -126,6 +130,7 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
                 .routeId("direct:get-clients")
                 .to(direct("retrieve-all-clients").getUri())
         ;
+        // TODO: implement
         from(direct("get-cars"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
