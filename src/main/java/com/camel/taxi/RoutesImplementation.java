@@ -21,21 +21,25 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
     public void configure() throws Exception {
         super.configure();
 
+        // IMPLEMENT
         from(direct("get-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders-orderId")
+            .to(direct("get-orders-by-id").getUri())
         ;
+        // IMPLEMENT
         from(direct("put-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-orders-orderId")
+            .to(direct("update-order-by-id").getUri())
         ;
+        // IMPLEMENT
         from(direct("delete-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-orders-orderId")
+            .to(direct("delete-order-by-id").getUri())
         ;
+        // IMPLEMENT
         from(direct("patch-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'patch-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:patch-orders-orderId")
+            .to(direct("change-driver-of-order").getUri())
         ;
         // IMPLEMENTED
         from(direct("get-drivers-driverId"))
@@ -100,13 +104,15 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'post-login'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("get-orders"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders")
+            .to(direct("get-all-orders").getUri())
         ;
+        // IMPLEMENTED
         from(direct("post-orders"))
-            .setBody(DatasonnetExpression.builder("{opId: 'post-orders'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:post-orders")
+            .to(direct("create-order").getUri())
         ;
         // IMPLEMENTED
         from(direct("get-drivers"))
@@ -117,13 +123,15 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
             .setBody(DatasonnetExpression.builder("{opId: 'get-test'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("get-orders-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders-drivers-driverId")
+            .to(direct("get-orders-by-driverId"))
         ;
+        // IMPLEMENTED
         from(direct("get-orders-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders-clients-clientId")
+            .to(direct("get-orders-by-clientId"))
         ;
         // IMPLEMENTED
         from(direct("get-clients"))
