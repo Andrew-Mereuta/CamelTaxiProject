@@ -1,0 +1,23 @@
+/** DataSonnet
+version=2.0
+output application/json
+input payload application/json
+*/
+local nullOrValue(param) =
+    if(param in payload) then
+        payload[param]
+    else
+        null;
+
+local nullOrValueTwo(param, value) =
+    if(param in value) then
+        value[param]
+    else
+        null;
+
+
+{
+	price: nullOrValue('price'),
+	driverEmail: nullOrValueTwo('email', payload.driver),
+	clientEmail: nullOrValueTwo('email', payload.client)
+}
