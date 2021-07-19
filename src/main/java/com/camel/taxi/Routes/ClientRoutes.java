@@ -1,18 +1,14 @@
 package com.camel.taxi.Routes;
 
 import com.camel.taxi.BaseRestRouteBuilder;
-import com.camel.taxi.Messages.Messages;
 import com.datasonnet.document.MediaTypes;
 import com.ms3_inc.tavros.extensions.rest.exception.BadRequestException;
 import com.ms3_inc.tavros.extensions.rest.exception.NotFoundException;
 import org.apache.camel.Exchange;
 import org.apache.camel.LoggingLevel;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.PredicateBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class ClientRoutes extends BaseRestRouteBuilder {

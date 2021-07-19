@@ -4,7 +4,6 @@ import com.camel.taxi.BaseRestRouteBuilder;
 import com.datasonnet.document.MediaTypes;
 import com.ms3_inc.tavros.extensions.rest.exception.BadRequestException;
 import com.ms3_inc.tavros.extensions.rest.exception.NotFoundException;
-import fansi.Str;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.PredicateBuilder;
 import org.apache.commons.lang3.StringUtils;

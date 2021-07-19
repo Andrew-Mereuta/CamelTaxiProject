@@ -5,11 +5,8 @@ import com.datasonnet.document.MediaTypes;
 import com.ms3_inc.tavros.extensions.rest.exception.BadRequestException;
 import com.ms3_inc.tavros.extensions.rest.exception.NotFoundException;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class CarRoutes extends BaseRestRouteBuilder {
