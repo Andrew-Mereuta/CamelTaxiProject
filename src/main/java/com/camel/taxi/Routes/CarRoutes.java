@@ -2,8 +2,14 @@ package com.camel.taxi.Routes;
 
 import com.camel.taxi.BaseRestRouteBuilder;
 import com.datasonnet.document.MediaTypes;
+import com.ms3_inc.tavros.extensions.rest.exception.BadRequestException;
+import com.ms3_inc.tavros.extensions.rest.exception.NotFoundException;
 import org.apache.camel.Exchange;
+import org.apache.camel.Processor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class CarRoutes extends BaseRestRouteBuilder {
@@ -25,17 +31,32 @@ public class CarRoutes extends BaseRestRouteBuilder {
             .routeId("direct:get-car-by-id")
             .setProperty("carId", simple("${header.carId}"))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
-            .transform(datasonnetEx("resource:classpath:car.ds", String.class)
-                .bodyMediaType(MediaTypes.APPLICATION_JAVA)
-                .outputMediaType(MediaTypes.APPLICATION_JSON))
-            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+            .choice()
+                .when(simple("${header.CamelSqlRowCount} == 0"))
+                    .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
+            .otherwise()
+                .transform(datasonnetEx("resource:classpath:car.ds", String.class)
+                    .bodyMediaType(MediaTypes.APPLICATION_JAVA)
+                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
         ;
 
         from(direct("update-car-by-id"))
             .routeId("direct:update-car-by-id")
+            .transform(datasonnetEx("resource:classpath:put-car.ds", String.class))
             .setProperty("carId", simple("${header.carId}"))
             .setProperty("model", datasonnetEx("payload.model", String.class))
-            .setProperty("driverEmail", datasonnetEx("payload.driver.email", String.class))
+            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
+            .to(sql("classpath:/sql/car/select-car-by-id.sql"))
+            .choice()
+                .when(simple("${header.CamelSqlRowCount} == 0"))
+                    .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
+            .otherwise()
+            .to(sql("classpath:/sql/driver/select-driverId-by-email.sql"))
+            .choice()
+                .when(simple("${header.CamelSqlRowCount} == 0"))
+                    .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
+            .otherwise()
             .to(sql("classpath:/sql/car/update-car-by-id.sql"))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
             .transform(datasonnetEx("resource:classpath:car.ds", String.class)
@@ -48,20 +69,33 @@ public class CarRoutes extends BaseRestRouteBuilder {
         from(direct("delete-car-by-id"))
             .routeId("direct:delete-car-by-id")
             .setProperty("carId", simple("${header.carId}"))
-            .to(sql("classpath:/sql/car/delete-car-by-id.sql"))
-            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+            .to(sql("classpath:/sql/car/select-car-by-id.sql"))
+            .choice()
+                .when(simple("${header.CamelSqlRowCount} == 0"))
+                    .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
+            .otherwise()
+                .to(sql("classpath:/sql/car/delete-car-by-id.sql"))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+                .setBody(constant(StringUtils.EMPTY))
         ;
 
         from(direct("patch-car-by-id"))
             .routeId("direct:patch-car-by-id")
             .setProperty("carId", simple("${header.carId}"))
             .setProperty("model", simple("${header.model}"))
-            .to(sql("classpath:/sql/car/update-model-of-car-by-id.sql"))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
-            .transform(datasonnetEx("resource:classpath:car.ds", String.class)
-                .bodyMediaType(MediaTypes.APPLICATION_JAVA)
-                .outputMediaType(MediaTypes.APPLICATION_JSON))
-            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-            ;
+            .choice()
+                .when(exchangeProperty("model").isNull())
+                    .throwException(new BadRequestException(msg.BAD_REQUEST_ERROR))
+                .when(simple("${header.CamelSqlRowCount} == 0"))
+                    .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
+            .otherwise()
+                .to(sql("classpath:/sql/car/update-model-of-car-by-id.sql"))
+                .to(sql("classpath:/sql/car/select-car-by-id.sql"))
+                .transform(datasonnetEx("resource:classpath:car.ds", String.class)
+                        .bodyMediaType(MediaTypes.APPLICATION_JAVA)
+                        .outputMediaType(MediaTypes.APPLICATION_JSON))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+        ;
     }
 }
