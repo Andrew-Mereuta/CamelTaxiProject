@@ -1,1 +1,2 @@
-SELECT * FROM driver WHERE email = :#{exchangeProperty.email};
+SELECT * FROM driver WHERE email = :#{exchangeProperty.email}
+;
