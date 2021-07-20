@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Mr.Rock",
+    "email": "rock@email.com",
+    "role": "ROLE_DRIVER",
+    "is_busy": false
+  }
+]

@@ -45,10 +45,6 @@ public class ClientRoutes extends BaseRestRouteBuilder {
         from(direct("put-client-by-id"))
                 .routeId("direct:put-client-by-id")
                 .log(LoggingLevel.INFO, "${body}")
-                .transform(datasonnetEx("resource:classpath:create-client-payload.ds", String.class))
-                .setProperty("clientId", simple("${header.clientId}"))
-                .setProperty("name", datasonnetEx("payload.name", String.class))
-                .setProperty("password", datasonnetEx("payload.password", String.class))
                 .to(sql("classpath:/sql/client/select-client-by-id.sql"))
                 .choice()
                     .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -65,7 +61,6 @@ public class ClientRoutes extends BaseRestRouteBuilder {
 
         from(direct("delete-client-by-id"))
                 .routeId("direct:delete-client-by-id")
-                .setProperty("clientId", simple("${header.clientId}"))
                 .to(sql("classpath:/sql/client/select-client-by-id.sql"))
                 .choice()
                     .when(simple("${header.CamelSqlRowCount} == 0"))

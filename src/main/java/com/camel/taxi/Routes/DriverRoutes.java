@@ -18,7 +18,6 @@ public class DriverRoutes extends BaseRestRouteBuilder {
 
         from(direct("get-driver-by-id"))
             .routeId("direct:get-driver-by-id")
-            .setProperty("driverId", simple("${header.driverId}"))
             .to(sql("classpath:/sql/driver/select-driver-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -32,10 +31,6 @@ public class DriverRoutes extends BaseRestRouteBuilder {
 
         from(direct("update-driver-by-id"))
             .routeId("direct:update-driver-by-id")
-            .transform(datasonnetEx("resource:classpath:put-driver.ds", String.class))
-            .setProperty("driverId", simple("${header.driverId}"))
-            .setProperty("name", datasonnetEx("payload.name", String.class))
-            .setProperty("password", datasonnetEx("payload.password", String.class))
             .to(sql("classpath:/sql/driver/select-driver-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -50,7 +45,6 @@ public class DriverRoutes extends BaseRestRouteBuilder {
 
         from(direct("delete-driver-by-id"))
             .routeId("direct:delete-driver-by-id")
-            .setProperty("driverId", simple("${header.driverId}"))
             .to(sql("classpath:/sql/driver/select-driver-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))

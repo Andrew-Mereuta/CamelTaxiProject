@@ -40,16 +40,22 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // IMPLEMENTED
         from(direct("get-drivers-driverId"))
             .routeId("direct:get-drivers-driverId")
+            .setProperty("driverId", simple("${header.driverId}"))
             .to(direct("get-driver-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("put-drivers-driverId"))
             .routeId("direct:put-drivers-driverId")
+            .transform(datasonnetEx("resource:classpath:put-driver.ds", String.class))
+            .setProperty("driverId", simple("${header.driverId}"))
+            .setProperty("name", datasonnetEx("payload.name", String.class))
+            .setProperty("password", datasonnetEx("payload.password", String.class))
             .to(direct("update-driver-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("delete-drivers-driverId"))
             .routeId("direct:delete-drivers-driverId")
+            .setProperty("driverId", simple("${header.driverId}"))
             .to(direct("delete-driver-by-id").getUri())
         ;
         // IMPLEMENTED
@@ -60,11 +66,16 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // IMPLEMENTED
         from(direct("put-clients-clientId"))
             .routeId("direct:put-clients-clientsId")
+            .transform(datasonnetEx("resource:classpath:create-client-payload.ds", String.class))
+            .setProperty("clientId", simple("${header.clientId}"))
+            .setProperty("name", datasonnetEx("payload.name", String.class))
+            .setProperty("password", datasonnetEx("payload.password", String.class))
             .to(direct("put-client-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("delete-clients-clientId"))
             .routeId("direct:delete-clients-clientId")
+            .setProperty("clientId", simple("${header.clientId}"))
             .to(direct("delete-client-by-id").getUri())
         ;
         // IMPLEMENTED
