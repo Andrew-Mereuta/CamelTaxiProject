@@ -20,21 +20,30 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // IMPLEMENTED
         from(direct("get-orders-orderId"))
             .routeId("direct:get-orders-orderId")
+            .setProperty("orderId", simple("${header.orderId}"))
             .to(direct("get-orders-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("put-orders-orderId"))
             .routeId("direct:put-orders-orderId")
+            .transform(datasonnetEx("resource:classpath:put-order.ds", String.class))
+            .setProperty("orderId", simple("${header.orderId}"))
+            .setProperty("clientEmail", datasonnetEx("payload.clientEmail", String.class))
+            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
+            .setProperty("price", datasonnetEx("payload.price", String.class))
             .to(direct("update-order-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("delete-orders-orderId"))
             .routeId("direct:delete-orders-orderId")
+            .setProperty("orderId", simple("${header.orderId}"))
             .to(direct("delete-order-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("patch-orders-orderId"))
             .routeId("direct:patch-orders-orderId")
+            .setProperty("orderId", simple("${header.orderId}"))
+            .setProperty("driverId", simple("${header.newDriverId}"))
             .to(direct("change-driver-of-order").getUri())
         ;
         // IMPLEMENTED
@@ -127,6 +136,9 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // IMPLEMENTED
         from(direct("post-orders"))
             .routeId("direct:post-orders")
+            .setProperty("clientId", simple("${header.clientId}"))
+            .setProperty("driverId", simple("${header.driverId}"))
+            .setProperty("price", simple("${random(50, 101)}"))
             .to(direct("create-order").getUri())
         ;
         // IMPLEMENTED
@@ -141,11 +153,13 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // IMPLEMENTED
         from(direct("get-orders-drivers-driverId"))
             .routeId("direct:get-orders-drivers-driverId")
+            .setProperty("driverId", simple("${header.driverId}"))
             .to(direct("get-orders-by-driverId"))
         ;
         // IMPLEMENTED
         from(direct("get-orders-clients-clientId"))
             .routeId("direct:get-orders-clients-clientId")
+            .setProperty("clientId", simple("${header.clientId}"))
             .to(direct("get-orders-by-clientId"))
         ;
         // IMPLEMENTED

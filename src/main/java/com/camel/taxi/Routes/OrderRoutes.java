@@ -21,9 +21,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("create-order"))
             .routeId("direct:create-order")
-            .setProperty("clientId", simple("${header.clientId}"))
-            .setProperty("driverId", simple("${header.driverId}"))
-            .setProperty("price", simple("${random(50, 101)}"))
             .to(sql("classpath:/sql/client/select-client-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -55,7 +52,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("get-orders-by-id"))
             .routeId("direct:get-orders-by-id")
-            .setProperty("orderId", simple("${header.orderId}"))
             .to(sql("classpath:/sql/order/select-order-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -69,7 +65,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("get-orders-by-driverId"))
             .routeId("direct:get-orders-by-driverId")
-            .setProperty("driverId", simple("${header.driverId}"))
             .to(sql("classpath:/sql/driver/select-driver-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -84,7 +79,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("get-orders-by-clientId"))
             .routeId("direct:get-orders-by-clientId")
-            .setProperty("clientId", simple("${header.clientId}"))
             .to(sql("classpath:/sql/client/select-client-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -99,11 +93,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("update-order-by-id"))
             .routeId("direct:update-order-by-id")
-            .transform(datasonnetEx("resource:classpath:put-order.ds", String.class))
-            .setProperty("orderId", simple("${header.orderId}"))
-            .setProperty("clientEmail", datasonnetEx("payload.clientEmail", String.class))
-            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
-            .setProperty("price", datasonnetEx("payload.price", String.class))
             .to(sql("classpath:/sql/order/select-order-by-id-custom.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -150,7 +139,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("delete-order-by-id"))
             .routeId("direct:delete-order-by-id")
-            .setProperty("orderId", simple("${header.orderId}"))
             .to(sql("classpath:/sql/order/select-order-by-id-custom.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -163,8 +151,6 @@ public class OrderRoutes extends BaseRestRouteBuilder {
 
         from(direct("change-driver-of-order"))
             .routeId("direct:change-driver-of-order")
-            .setProperty("orderId", simple("${header.orderId}"))
-            .setProperty("driverId", simple("${header.newDriverId}"))
             .to(sql("classpath:/sql/order/select-order-by-id-custom.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
