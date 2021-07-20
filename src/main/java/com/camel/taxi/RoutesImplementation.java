@@ -81,21 +81,29 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
         // IMPLEMENTED
         from(direct("get-cars-carId"))
             .routeId("direct:get-cars-carId")
+            .setProperty("carId", simple("${header.carId}"))
             .to(direct("get-car-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("put-cars-carId"))
             .routeId("direct:put-cars-carId")
+            .transform(datasonnetEx("resource:classpath:put-car.ds", String.class))
+            .setProperty("carId", simple("${header.carId}"))
+            .setProperty("model", datasonnetEx("payload.model", String.class))
+            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
             .to(direct("update-car-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("delete-cars-carId"))
             .routeId("direct:delete-cars-carId")
+            .setProperty("carId", simple("${header.carId}"))
             .to(direct("delete-car-by-id").getUri())
         ;
         // IMPLEMENTED
         from(direct("patch-cars-carId"))
             .routeId("direct:patch-cars-carId")
+            .setProperty("carId", simple("${header.carId}"))
+            .setProperty("model", simple("${header.model}"))
             .to(direct("patch-car-by-id"))
         ;
         // IMPLEMENTED

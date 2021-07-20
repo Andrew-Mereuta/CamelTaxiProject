@@ -26,7 +26,6 @@ public class CarRoutes extends BaseRestRouteBuilder {
 
         from(direct("get-car-by-id"))
             .routeId("direct:get-car-by-id")
-            .setProperty("carId", simple("${header.carId}"))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -40,10 +39,6 @@ public class CarRoutes extends BaseRestRouteBuilder {
 
         from(direct("update-car-by-id"))
             .routeId("direct:update-car-by-id")
-            .transform(datasonnetEx("resource:classpath:put-car.ds", String.class))
-            .setProperty("carId", simple("${header.carId}"))
-            .setProperty("model", datasonnetEx("payload.model", String.class))
-            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -65,7 +60,6 @@ public class CarRoutes extends BaseRestRouteBuilder {
         // have doubts about implementation, have to doublecheck with basecamp project
         from(direct("delete-car-by-id"))
             .routeId("direct:delete-car-by-id")
-            .setProperty("carId", simple("${header.carId}"))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
             .choice()
                 .when(simple("${header.CamelSqlRowCount} == 0"))
@@ -78,8 +72,6 @@ public class CarRoutes extends BaseRestRouteBuilder {
 
         from(direct("patch-car-by-id"))
             .routeId("direct:patch-car-by-id")
-            .setProperty("carId", simple("${header.carId}"))
-            .setProperty("model", simple("${header.model}"))
             .to(sql("classpath:/sql/car/select-car-by-id.sql"))
             .choice()
                 .when(exchangeProperty("model").isNull())
