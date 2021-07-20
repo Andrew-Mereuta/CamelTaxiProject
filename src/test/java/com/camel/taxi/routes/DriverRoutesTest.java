@@ -70,6 +70,11 @@ public class DriverRoutesTest extends CamelTestSupport {
         AdviceWith.adviceWith(context.getRouteDefinition(routeToTest), context, new AdviceWithRouteBuilder() {
             @Override
             public void configure() throws Exception {
+                weaveAddFirst()
+                        .setProperty("name", constant("Mr.Rock"))
+                        .setProperty("password", constant("password"))
+                ;
+
                 weaveByToString(".*select-driver-by-id.*")
                         .replace()
                         .setHeader("CamelSqlRowCount", constant("1"))

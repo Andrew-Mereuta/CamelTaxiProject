@@ -30,7 +30,7 @@ public class ClientRoutes extends BaseRestRouteBuilder {
                     .bodyMediaType(MediaTypes.APPLICATION_JAVA)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                ;
+        ;
 
         from(direct("retrieve-all-clients"))
                 .routeId("direct:retrieve-all-clients")
@@ -40,7 +40,7 @@ public class ClientRoutes extends BaseRestRouteBuilder {
                     .bodyMediaType(MediaTypes.APPLICATION_JAVA)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                ;
+        ;
 
         from(direct("put-client-by-id"))
                 .routeId("direct:put-client-by-id")
@@ -51,13 +51,13 @@ public class ClientRoutes extends BaseRestRouteBuilder {
                         .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
                     .when(PredicateBuilder.or(exchangeProperty("name").isNull(),  exchangeProperty("password").isNull()))
                         .throwException(new BadRequestException(msg.BAD_REQUEST_ERROR))
-                    .otherwise()
-                        .to(sql("classpath:/sql/client/update-name-password-client.sql"))
-                        .transform(datasonnetEx("resource:classpath:clients.ds", String.class)
-                            .bodyMediaType(MediaTypes.APPLICATION_JAVA)
-                            .outputMediaType(MediaTypes.APPLICATION_JSON))
-                        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                ;
+                .end()
+                .to(sql("classpath:/sql/client/update-name-password-client.sql"))
+                .transform(datasonnetEx("resource:classpath:clients.ds", String.class)
+                    .bodyMediaType(MediaTypes.APPLICATION_JAVA)
+                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+        ;
 
         from(direct("delete-client-by-id"))
                 .routeId("direct:delete-client-by-id")
@@ -65,10 +65,10 @@ public class ClientRoutes extends BaseRestRouteBuilder {
                 .choice()
                     .when(simple("${header.CamelSqlRowCount} == 0"))
                         .throwException(new NotFoundException(msg.NOT_FOUND_ERROR))
-                    .otherwise()
-                        .to(sql("classpath:/sql/client/delete-client-by-id.sql"))
-                        .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                        .setBody(constant(StringUtils.EMPTY))
-                ;
+                .end()
+                .to(sql("classpath:/sql/client/delete-client-by-id.sql"))
+                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+                .setBody(constant(StringUtils.EMPTY))
+        ;
     }
 }
