@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `car` (
                                      FOREIGN KEY (`driver_id`) REFERENCES `driver` (`driver_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `order` (
+CREATE TABLE IF NOT EXISTS `orders` (
                                        `order_id` bigint NOT NULL AUTO_INCREMENT,
                                        `price` double DEFAULT NULL,
                                        `driver_id` bigint DEFAULT NULL,
