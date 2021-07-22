@@ -1,4 +1,4 @@
-UPDATE taxidb.order o
+UPDATE orders o
 SET o.driver_id = :#${exchangeProperty.driverId}
     ,
     o.client_id = :#${exchangeProperty.clientId}

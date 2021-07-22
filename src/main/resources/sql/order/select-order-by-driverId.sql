@@ -2,7 +2,7 @@ select o.price as price,
        d.email as driverEmail,
        c.email as clientEmail,
        car.model as carModel
-from taxidb.order as o,
+from orders as o,
      client as c,
      driver as d,
      car

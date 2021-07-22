@@ -1,2 +1,2 @@
-DELETE FROM taxidb.order AS o WHERE o.order_id = :#${exchangeProperty.orderId}
+DELETE FROM orders AS o WHERE o.order_id = :#${exchangeProperty.orderId}
 ;
