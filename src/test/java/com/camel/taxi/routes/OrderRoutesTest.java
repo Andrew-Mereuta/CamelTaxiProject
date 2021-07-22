@@ -220,79 +220,79 @@ public class OrderRoutesTest extends CamelTestSupport {
     }
 
     //not working!!!!!!
-//    @Test
-//    public void updateOrderByIdTest() throws Exception {
-//        String routeToTest = "direct:update-order-by-id";
-//
-//        AdviceWith.adviceWith(context.getRouteDefinition(routeToTest), context, new AdviceWithRouteBuilder() {
-//            @Override
-//            public void configure() throws Exception {
-//                weaveAddFirst()
-//                        .setProperty("orderId", constant(1))
-//                        .setProperty("clientEmail", constant("andrew@email.com"))
-//                        .setProperty("driverEmail", constant("rock@email.com"))
-//                        .setProperty("price", constant(94))
-//                ;
-//
-//                weaveByToString(".*select-order-by-id-custom.*")
-//                        .replace()
-//                        .setHeader("CamelSqlRowCount", constant("1"))
-//                        .setBody(constant(null))
-//                ;
-//
-////                generated keys
-//                List<Object> generatedKeys = new ArrayList<Object>(0);
-//                Map<String, Object> generatedKeyMap = new HashMap<String, Object>(0);
-//                generatedKeyMap.put("GENERATED_KEY", "1");
-//                generatedKeys.add(generatedKeyMap);
-//
-//                weaveByToString(".*select-clientId-by-email.*")
-//                        .replace()
-//                        .setHeader("CamelSqlRowCount", constant("1"))
-//                        .setHeader("CamelSqlGeneratedKeyRows", constant(generatedKeys))
-//                        .setProperty("clientId", constant("1"))
-//                        .setBody(simple("{}"))
-//                ;
-//
-//
-//                //generated keys
-//                List<Object> generatedKeys1 = new ArrayList<Object>(0);
-//                Map<String, Object> generatedKeyMap1 = new HashMap<String, Object>(0);
-//                generatedKeyMap1.put("GENERATED_KEY", "1");
-//                generatedKeys.add(generatedKeyMap1);
-//
-//                weaveByToString(".*select-driverId-by-email.*")
-//                        .replace()
-//                        .setHeader("CamelSqlRowCount", constant("1"))
-//                        .setHeader("CamelSqlGeneratedKeyRows", constant(generatedKeys1))
-//                        .setProperty("driverId", constant("1"))
-//                        .setBody(simple("1"))
-//                ;
-//
-//                weaveByToString(".*update-order-by-id.*")
-//                        .replace()
-//                        .setBody(constant(null))
-//                ;
-//
-//                weaveByToString(".*select-order-by-id.*")
-//                        .replace()
-//                        .setBody(datasonnet("resource:classpath:/json/orders.json", List.class))
-//                ;
-//
-//                weaveAddLast().to("mock:result");
-//            }
-//        });
-//
-//        MockEndpoint mockEndpoint = getMockEndpoint("mock:result");
-//        template.sendBody(routeToTest, "");
-//        String retrievedBody = mockEndpoint.getExchanges().get(0).getIn().getBody().toString();
-//        ObjectMapper mapper = new ObjectMapper();
-//        Map<String, String> map = mapper.readValue(retrievedBody, Map.class);
-//        Assertions.assertEquals("andrew@email.com", map.get("clientEmail"));
-//        Assertions.assertEquals("rock@email.com", map.get("driverEmail"));
-//        Assertions.assertEquals(94, map.get("price"));
-//        Assertions.assertEquals("Mers", map.get("car"));
-//    }
+    @Test
+    public void updateOrderByIdTest() throws Exception {
+        String routeToTest = "direct:update-order-by-id";
+
+        AdviceWith.adviceWith(context.getRouteDefinition(routeToTest), context, new AdviceWithRouteBuilder() {
+            @Override
+            public void configure() throws Exception {
+                weaveAddFirst()
+                        .setProperty("orderId", constant(1))
+                        .setProperty("clientEmail", constant("andrew@email.com"))
+                        .setProperty("driverEmail", constant("rock@email.com"))
+                        .setProperty("price", constant(94))
+                ;
+
+                weaveByToString(".*select-order-by-id-custom.*")
+                        .replace()
+                        .setHeader("CamelSqlRowCount", constant("1"))
+                        .setBody(constant(null))
+                ;
+
+//                generated keys
+                List<Object> generatedKeys = new ArrayList<Object>(0);
+                Map<String, Object> generatedKeyMap = new HashMap<String, Object>(0);
+                generatedKeyMap.put("GENERATED_KEY", "1");
+                generatedKeys.add(generatedKeyMap);
+
+                weaveByToString(".*select-clientId-by-email.*")
+                        .replace()
+                        .setHeader("CamelSqlRowCount", constant("1"))
+                        .setHeader("CamelSqlGeneratedKeyRows", constant(generatedKeys))
+                        .setProperty("clientId", constant("1"))
+                        .setBody(simple("{}")) // , List.class
+                ;
+
+
+                //generated keys
+                List<Object> generatedKeys1 = new ArrayList<Object>(0);
+                Map<String, Object> generatedKeyMap1 = new HashMap<String, Object>(0);
+                generatedKeyMap1.put("GENERATED_KEY", "1");
+                generatedKeys.add(generatedKeyMap1);
+
+                weaveByToString(".*select-driverId-by-email.*")
+                        .replace()
+                        .setHeader("CamelSqlRowCount", constant("1"))
+                        .setHeader("CamelSqlGeneratedKeyRows", constant(generatedKeys1))
+                        .setProperty("driverId", constant("1"))
+                        .setBody(simple("1"))
+                ;
+
+                weaveByToString(".*update-order-by-id.*")
+                        .replace()
+                        .setBody(constant(null))
+                ;
+
+                weaveByToString(".*select-order-by-id.*")
+                        .replace()
+                        .setBody(datasonnet("resource:classpath:/json/orders.json", List.class))
+                ;
+
+                weaveAddLast().to("mock:result");
+            }
+        });
+
+        MockEndpoint mockEndpoint = getMockEndpoint("mock:result");
+        template.sendBody(routeToTest, "");
+        String retrievedBody = mockEndpoint.getExchanges().get(0).getIn().getBody().toString();
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> map = mapper.readValue(retrievedBody, Map.class);
+        Assertions.assertEquals("andrew@email.com", map.get("clientEmail"));
+        Assertions.assertEquals("rock@email.com", map.get("driverEmail"));
+        Assertions.assertEquals(94, map.get("price"));
+        Assertions.assertEquals("Mers", map.get("car"));
+    }
 
     @Test
     public void deleteOrderByIdTest() throws Exception {
