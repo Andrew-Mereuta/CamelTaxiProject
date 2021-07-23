@@ -1,0 +1,79 @@
+############
+#Deployment#
+############
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: camel-project
+  labels:
+    app: camel-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: camel-project
+  template:
+    metadata:
+      labels:
+        app: camel-project
+    spec:
+      containers:
+      - name: camel-project
+        image: andrewmereuta/camel-project # should be my image which I upload there: andrewmereuta/camel-project
+        ports:
+        - containerPort: 9000
+        env:
+        - name: spring.datasource.url
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-configMap
+              key: url
+        - name: spring.datasource.username
+          valueFrom:
+            secretKeyRef:
+              name: secretKeys
+              key: username
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: secretKeys
+              key: password
+---
+#########
+#Service#
+#########
+apiVersion: v1
+kind: Service
+metadata:
+  name: camel-project-service
+spec:
+  selector:
+    app: camel-project
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+#      nodePort: 9000
+---
+#########
+#Ingress#
+#########
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: camep-api
+spec:
+  rules:
+  - host: camel-api.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: camel-project-service
+            port:
+              number: 9000
+# Ingress controller should be installed before execution of this file, whcih one to choose????
+# Try without ingress
+# either nginx controller or controller
