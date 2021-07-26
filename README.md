@@ -31,11 +31,24 @@ kubernetes files (.yaml), for me it is: <br>```D:\camel\camel-taxi-transform-try
 6) The database is not created instantly, it needs some time about 30 seconds. I recommend to wait
 1 minute or more. After 1 minute, the last step is to create deployment: <br> 
 ```kubectl apply -f ./camel-deploy.yaml```
+<br>
 
-7) If everything works fine (again I recommend to wait about 1 minute), 
+7) Your application is starting, but you will not be able to access it from the outside. What we need to do
+is port-forwarding. Type in the terminal: <br>```kubectl get pods``` 
+<br> You should see something like: 
+```
+NAME                             READY   STATUS    RESTARTS   AGE
+camel-project-74fb99fc9b-hh24m   1/1     Running   0          2m28s
+mysql-sfs-0                      1/1     Running   0          6m39s
+```
+
+8) You need only the first pod for port-forwarding: <br>
+```kubectl port-forward pod/camel-project-74fb99fc9b-hh24m 9000:9000```
+
+9) If everything works fine (again I recommend to wait about 1 minute), 
 you should be able to send requests by this url: localhost:9000/api/...
 
-8) *You can also check the state of your pods by typing:<br>  ```kubectl get pods```<br>
+10) *You can also check the state of your pods by typing:<br>  ```kubectl get pods```<br>
 Correct state is: RUNNING
    
 
