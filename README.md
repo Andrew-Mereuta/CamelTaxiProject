@@ -50,7 +50,11 @@ you should be able to send requests by this url: localhost:9000/api/...
 
 10) *You can also check the state of your pods by typing:<br>  ```kubectl get pods```<br>
 Correct state is: RUNNING
-   
+   -----------------------
+11) *Ingress, install controller: 
+<br>```kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml```
+
+12) Do the same as before. 
 
 ### Getting Started
 
