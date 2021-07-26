@@ -26,17 +26,17 @@ spec:
         - name: spring.datasource.url
           valueFrom:
             configMapKeyRef:
-              name: mysql-configMap
+              name: mysql-config-map
               key: url
         - name: spring.datasource.username
           valueFrom:
             secretKeyRef:
-              name: secretKeys
+              name: secret-keys
               key: username
         - name: spring.datasource.password
           valueFrom:
             secretKeyRef:
-              name: secretKeys
+              name: secret-keys
               key: password
 ---
 #########
@@ -58,22 +58,22 @@ spec:
 #########
 #Ingress#
 #########
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: camep-api
-spec:
-  rules:
-  - host: camel-api.com
-    http:
-      paths:
-      - path: /api
-        pathType: Prefix
-        backend:
-          service:
-            name: camel-project-service
-            port:
-              number: 9000
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: camep-api
+#spec:
+#  rules:
+#  - host: camel-api.com
+#    http:
+#      paths:
+#      - path: /api
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: camel-project-service
+#            port:
+#              number: 9000
 # Ingress controller should be installed before execution of this file, whcih one to choose????
 # Try without ingress
 # either nginx controller or controller

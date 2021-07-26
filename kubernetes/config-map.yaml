@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-configMap
+  name: mysql-config-map
 data:
   url: jdbc:mysql://mysql-db-service:3306/tdb?createDatabaseIfNotExist=true&useUnicode=true&serverTimezone=UTC
-# Have doubts
 # 1

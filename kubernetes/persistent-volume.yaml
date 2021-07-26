@@ -1,4 +1,3 @@
-# I think I need to use either db-deploy or persistent-volume, but not both. 
 apiVersion: v1
 kind: Service
 metadata:
@@ -60,18 +59,18 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: secretKeys
+              name: secret-keys
               key: password
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: secretKeys
+              name: secret-keys
               key: password
-        - name: MYSQL_USER   
-          valueFrom:
-            secretKeyRef:
-              name: secretKeys
-              key: username        
+#        - name: MYSQL_USER
+#          valueFrom:
+#            secretKeyRef:
+#              name: secret-keys
+#              key: username
         ports:
         - containerPort: 3306
           name: mysql
