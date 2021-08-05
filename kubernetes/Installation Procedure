@@ -1,0 +1,15 @@
+ kubectl apply -f ./secretMap.yaml
+ kubectl apply -f ./config-map.yaml
+ kubectl apply -f ./persistent-volume.yaml
+ sleep(40)
+ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml
+ sleep(10)
+ kubectl apply -f ./camel-deploy.yaml
+ ---------------------------------------------------------------------------------------------------------------------------------------------
+ kubectl delete -f ./secretMap.yaml
+ kubectl delete -f ./config-map.yaml
+ kubectl delete -f ./persistent-volume.yaml
+ kubectl delete -f ./camel-deploy.yaml
+ kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml
+ ---------------------------------------------------------------------------------------------------------------------------------------------
+ I recommend to reset Kubernetes cluster

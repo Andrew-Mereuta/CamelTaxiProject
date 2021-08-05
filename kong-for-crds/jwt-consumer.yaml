@@ -1,0 +1,12 @@
+###########
+#Consumers#
+###########
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: camel-consumer
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: camel-consumer
+credentials:
+  - jwt-secret

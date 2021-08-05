@@ -1,0 +1,25 @@
+ kubectl create secret generic kong-session-config --from-file=admin_gui_session_conf --from-file=portal_session_conf
+ kubectl create secret generic kong-enterprise-license --from-file=license=./license.json
+ kubectl create secret generic kong-enterprise-superuser-password --from-literal=password=pass
+ helm install kong-ee kong/kong --values=kong-enterprise-full-k4k8s.yml
+ kubectl port-forward deploy/kong-ee-kong 8001:8001 (not mandatory)
+ -----------------------------------------------------------------------------------------------------------------------
+ kubectl apply -f ./secretMap.yaml
+ kubectl apply -f ./jwt-plugin.yaml
+ kubectl apply -f ./config-map.yaml
+ kubectl apply -f ./persistent-volume.yaml
+ sleep(40)
+ kubectl apply -f ./camel-deploy.yaml
+ kubectl apply -f ./jwt-consumer.yaml
+ -----------------------------------------------------------------------------------------------------------------------
+ Use url: localhost:81/api/clients
+ and 2 headers: host: camel-api.com
+                authorization: <the same as for kong-manager>
+ -----------------------------------------------------------------------------------------------------------------------
+ kubectl delete -f ./secretMap.yaml
+ kubectl delete -f ./config-map.yaml
+ kubectl delete -f ./persistent-volume.yaml
+ kubectl delete -f ./camel-deploy.yaml
+ kubectl delete -f ./jwt-consumer.yaml
+ kubectl delete -f ./jwt-plugin.yaml
+ helm delete kong-ee

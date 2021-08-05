@@ -12,6 +12,7 @@ it application.yaml and secretMap.yaml files.
 * If your database uses other port than 3306, you should change it in files: config-map.yaml, persistent-volume.yaml,
 application.yaml.
 * Install on your machine Docker and enable there Kubernetes.
+* Create an image of your api: ```docker build -t <docker-hub-account-name>/<repo-name> .```
 
 ### Process of starting application with Kubernetes (no Ingress):
 
@@ -54,7 +55,10 @@ Correct state is: RUNNING
 11) *Ingress, install controller: 
 <br>```kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.45.0/deploy/static/provider/cloud/deploy.yaml```
 
-12) Do the same as before. 
+12) To check which port you have to use, write in command port: ```kubectl get ingress```
+Under the column PORTS you will see port, which you have to use. 
+    
+13) When you use ingress to access api, always add header ```host: camel-api.com```
 
 ### Getting Started
 

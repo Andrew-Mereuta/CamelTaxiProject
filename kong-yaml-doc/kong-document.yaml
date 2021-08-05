@@ -1,0 +1,665 @@
+openapi: 3.0.1
+info:
+  title: Taxi Project
+  version: v1
+servers:
+  - url: http://localhost:81/
+    description: Generated server url
+paths:
+  /orders/{orderId}:
+    get:
+      tags:
+        - order-controller
+      operationId: getSpecificOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: either client or driver is not found
+        "403":
+          description: you are not allowed to do it
+    put:
+      tags:
+        - order-controller
+      operationId: updateOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "404":
+          description: order is not found
+        "403":
+          description: you are not allowed to do it
+    delete:
+      tags:
+        - order-controller
+      operationId: deleteSpecificOrder
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: order is not found
+        "403":
+          description: you are not allowed to do it
+    patch:
+      tags:
+        - order-controller
+      operationId: changeDriver
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: newDriverId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: either order or diver is not found
+        "403":
+          description: you are not allowed to do it
+  /drivers/{driverId}:
+    get:
+      tags:
+        - driver-controller
+      operationId: getDriverById
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Driver"
+        "404":
+          description: driver is not found
+        "403":
+          description: this is confidential information
+    put:
+      tags:
+        - driver-controller
+      operationId: updateDriver
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+        "404":
+          description: driver is not found
+        "403":
+          description: you are not allowed to do it
+    delete:
+      tags:
+        - driver-controller
+      operationId: deleteDriverById
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: driver is not found
+        "403":
+          description: you are not allowed to do it
+  /clients/{clientId}:
+    get:
+      tags:
+        - client-controller
+      operationId: getClientWithId
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "404":
+          description: Client does not exist
+        "403":
+          description: Sorry, this is confidential information
+    put:
+      tags:
+        - client-controller
+      operationId: updateClient
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Client'
+        "404":
+          description: Client is not found
+        "403":
+          description: method is not allowed
+    delete:
+      tags:
+        - client-controller
+      operationId: deleteClient
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: client is not found
+
+  /cars/{carId}:
+    get:
+      tags:
+        - car-controller
+      operationId: getTheCar
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
+        "404":
+          description: car is not found
+        "403":
+          description: this is confidential information
+    put:
+      tags:
+        - car-controller
+      operationId: updateCar
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Car'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        "404":
+          description: car is not found
+        "403":
+          description: you are not allowed to do it
+    delete:
+      tags:
+        - car-controller
+      operationId: deleteTheCar
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: car is not found
+        "403":
+          description: you are not allowed to do it
+    patch:
+      tags:
+        - car-controller
+      operationId: changeModel
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: model
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
+        "404":
+          description: car is not found
+        "403":
+          description: you are not allowed to do it
+  /register:
+    post:
+      tags:
+        - register-controller
+      operationId: registerClient
+      parameters:
+        - name: who
+          in: query
+          required: false
+          schema:
+            type: string
+            default: client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/Client-register'
+                - $ref: '#/components/schemas/Driver-register'
+        required: true
+      responses:
+        "201":
+          description: created either driver or client
+        "405":
+          description: You are doing smth wrong. May be you are already registered.
+        "500":
+          description: internal server error
+  /login:
+    post:
+      tags:
+        - login-attempt
+      operationId: login
+      requestBody:
+        content:
+          application:/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: Successfully logged in and received JWT in header
+        '403':
+          description: Failure during logging in
+  /orders:
+    get:
+      tags:
+        - order-controller
+      operationId: getAllOrders
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Order"
+        "403":
+          description: you are not allowed to do it
+    post:
+      tags:
+        - order-controller
+      operationId: createOrder
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: driverId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: either client or driver is not found
+        "403":
+          description: you are not allowed to do it
+  /drivers:
+    get:
+      tags:
+        - driver-controller
+      operationId: getAllDrivers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Driver"
+  /test:
+    get:
+      tags:
+        - test-controller
+      operationId: test
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /orders/drivers/{driverId}:
+    get:
+      tags:
+        - order-controller
+      operationId: getOrdersOfDiver
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Order"
+        "404":
+          description: client is not found
+        "403":
+          description: you are not allowed to do it
+  /orders/clients/{clientId}:
+    get:
+      tags:
+        - order-controller
+      operationId: getOrdersOfClient
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Order"
+        "404":
+          description: client is not found
+        "403":
+          description: you are not allowed to do it
+  /clients:
+    get:
+      tags:
+        - client-controller
+      operationId: allClients
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+  /cars:
+    get:
+      tags:
+        - car-controller
+      operationId: getAllCars
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Car"
+        "403":
+          description: you are not allowed to do it
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Car:
+      type: object
+      properties:
+        model:
+          type: string
+        driver-email:
+          type: string
+        driver-name:
+          type: string
+    Client:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+    Client-register:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+    Driver-register:
+      type: object
+      properties:
+        driver:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            password:
+              type: string
+        car:
+          type: object
+          properties:
+            model:
+              type: string
+    Driver:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        busy:
+          type: boolean
+    Order:
+      type: object
+      properties:
+        clientEmail:
+          type: string
+        driverEmail:
+          type: string
+        price:
+          type: number
+          format: double
+        car:
+          type: string
