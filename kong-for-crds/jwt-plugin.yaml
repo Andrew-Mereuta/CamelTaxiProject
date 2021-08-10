@@ -16,3 +16,12 @@ config:
   limit_by: ip
   policy: local
 plugin: rate-limiting
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: sample-plugin
+config:
+  requestHeader: "x-my-custom-request-header"
+  responseHeader: "This is my sample response header"
+plugin: sample-plugin

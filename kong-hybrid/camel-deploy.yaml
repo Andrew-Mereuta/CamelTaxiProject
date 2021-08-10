@@ -47,7 +47,7 @@ kind: Service
 metadata:
   name: camel-project-service
   annotations:
-    konghq.com/plugins: camel-api-jwt, rate-limit, sample-plugin
+    konghq.com/plugins: sample-plugin
 spec:
   selector:
     app: camel-project

@@ -5,6 +5,10 @@ info:
 servers:
   - url: http://localhost:81/
     description: Generated server url
+
+security:
+  - bearerAuth: []
+
 paths:
   /orders/{orderId}:
     get:
@@ -663,3 +667,8 @@ components:
           format: double
         car:
           type: string
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

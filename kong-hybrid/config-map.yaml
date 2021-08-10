@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config-map
+data:
+  url: jdbc:mysql://mysql-db-service:3306/tdb?createDatabaseIfNotExist=true&useUnicode=true&serverTimezone=UTC # port: 3306
+# 1

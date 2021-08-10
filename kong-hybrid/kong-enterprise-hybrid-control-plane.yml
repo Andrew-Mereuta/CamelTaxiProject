@@ -1,0 +1,158 @@
+# Basic configuration for Kong without the ingress controller, using the Postgres subchart
+# This installation does not create an Ingress or LoadBalancer Service for
+# the Admin API. It requires port-forwards to access without further
+# configuration to add them, e.g.:
+# kubectl port-forward deploy/your-deployment-kong 8001:8001
+
+image:
+  repository: kong-ee
+  tag: latest
+
+env:
+  prefix: /kong_prefix/
+  database: postgres
+  role: control_plane
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+
+  password:
+    valueFrom:
+      secretKeyRef:
+        name: kong-enterprise-superuser-password
+        key: password
+
+admin:
+  enabled: true
+  http:
+    enabled: true
+    servicePort: 8001
+    containerPort: 8001
+
+cluster:
+  enabled: true
+  tls:
+    enabled: true
+    servicePort: 8005
+    containerPort: 8005
+
+clustertelemetry:
+  enabled: true
+  tls:
+    enabled: true
+    servicePort: 8006
+    containerPort: 8006
+
+proxy:
+  enabled: false
+
+enterprise:
+  enabled: true
+  license_secret: kong-enterprise-license
+  vitals:
+    enabled: true
+  portal:
+    enabled: true
+    portal_auth: basic-auth
+    session_conf_secret: kong-session-config
+  rbac:
+    enabled: true
+    admin_gui_auth: basic-auth
+    session_conf_secret: kong-session-config
+  smtp:
+    enabled: false
+
+manager:
+  enabled: true
+  type: NodePort
+  http:
+    enabled: true
+    servicePort: 8002
+    containerPort: 8002
+    nodePort: 32080
+    parameters: []
+  tls:
+    enabled: true
+    servicePort: 8445
+    containerPort: 8445
+    parameters:
+      - http2
+  externalIPs: []
+
+portal:
+  enabled: true
+  type: NodePort
+  annotations:
+    konghq.com/protocol: "https"
+  http:
+    enabled: true
+    servicePort: 8003
+    containerPort: 8003
+    parameters: []
+  tls:
+    enabled: true
+    servicePort: 8446
+    containerPort: 8446
+    parameters:
+      - http2
+  externalIPs: []
+
+portalapi:
+  enabled: true
+  type: NodePort
+  annotations:
+    konghq.com/protocol: "https"
+  http:
+    enabled: true
+    servicePort: 8004
+    containerPort: 8004
+    parameters: []
+  tls:
+    enabled: true
+    servicePort: 8447
+    containerPort: 8447
+    parameters:
+      - http2
+  externalIPs: []
+
+secretVolumes:
+  - kong-cluster-cert
+
+postgresql:
+  enabled: true
+  postgresqlUsername: kong
+  postgresqlDatabase: kong
+  service:
+    port: 5432
+
+ingressController:
+  enabled: true
+  installCRDs: false
+  env:
+    kong_admin_tls_skip_verify: 'true'
+    kong_admin_token:
+      valueFrom:
+        secretKeyRef:
+          name: kong-enterprise-superuser-password
+          key: password
+    publish_service: default/dp-release-kong-proxy
+
+plugins:
+  configMaps:
+    - name: kong-plugin-sample-plugin
+      pluginName: sample-plugin
+
+# env:
+#   publish_service: hybrid/example-release-data-kong-proxy
+#
+# You can uncomment these lines above if you are choosing to use the ingress controller.
+# If using the ingress controller, you must also specify the DP proxy service as its publish target to keep Ingress status information up to date:
+# Replace hybrid with your DP nodes' namespace (default if no namespace was specified) and example-release-data with the name of the DP release.
+
+#  kubectl create configmap kong-plugin-sample-plugin --from-file=sample-plugin
+#  kubectl create secret generic kong-session-config --from-file=admin_gui_session_conf --from-file=portal_session_conf
+#  kubectl create secret generic kong-enterprise-superuser-password --from-literal=password=pass
+#  kubectl create secret generic kong-enterprise-license --from-file=license=./license.json
+#  kubectl create secret tls kong-cluster-cert --cert=cluster.crt --key=cluster.key
+#  helm install cp-release kong/kong --values=kong-enterprise-hybrid-control-plane.yml
+#  helm install dp-release kong/kong --values=kong-enterprise-hybrid-data-plane.yml
+#  kubectl port-forward deploy/cp-release-kong 8001:8001
