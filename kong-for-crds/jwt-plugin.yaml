@@ -22,6 +22,6 @@ kind: KongPlugin
 metadata:
   name: sample-plugin
 config:
-  requestHeader: "x-my-custom-request-header"
-  responseHeader: "This is my sample response header"
+  requestHeader: "yourValue"
+  startValue: "5"
 plugin: sample-plugin

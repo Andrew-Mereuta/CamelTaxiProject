@@ -10,12 +10,12 @@ return {
                 {   requestHeader = {
                     type = "string",
                     required = false,
-                    default = "x-sample-request-header"
+                    default = "yourValue"
                 }},
-                {   responseHeader = {
+                {   startValue = {
                     type = "string",
                     required = false,
-                    default = "this is a sample response header"
+                    default = "startValue"
                 }}
             },
         }}

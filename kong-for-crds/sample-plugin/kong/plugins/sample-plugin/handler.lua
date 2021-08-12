@@ -11,19 +11,17 @@ end
 
 function sample:access(config)
     sample.super.access(self)
-
-    if kong.request.get_header(config.requestHeader) == nil then
-        return sample
+    math.randomseed(os.time())
+    local a = kong.request.get_header(config.requestHeader)
+    if a ~= config.startValue then
+        kong.response.exit(426, {message = "Incorrect number", answer = config.startValue, myValue = a})
     else
-        self.req_header_string = kong.request.get_header(config.requestHeader)
+        local value1 = math.random(1, 15)
+        local value2 = math.random(1, 15)
+        kong.response.set_header("value1", value1)
+        kong.response.set_header("value2", value2)
+        config.startValue = tostring(value1 + value2)
     end
-end
-
-function sample:header_filter(config)
-  -- do custom logic here
-  kong.response.set_header("x-sample-response-header", config.responseHeader)
-  -- display what we got from the request header
-  kong.response.set_header("x-we-got-from-request-header", self.req_header_string)
 end
 
 return sample
