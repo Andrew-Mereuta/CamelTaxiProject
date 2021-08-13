@@ -1,0 +1,6 @@
+ds.map(payload, function(driver) {
+    name : driver.name,
+    email : driver.email,
+    role : driver.role,
+    is_busy : driver.is_busy
+})

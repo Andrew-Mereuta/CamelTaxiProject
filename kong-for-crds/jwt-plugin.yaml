@@ -1,0 +1,27 @@
+#########
+#Plugins#
+#########
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: camel-api-jwt
+plugin: jwt
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rate-limit
+config:
+  minute: 5
+  limit_by: ip
+  policy: local
+plugin: rate-limiting
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: sample-plugin
+config:
+  requestHeader: "yourValue"
+  startValue: "5"
+plugin: sample-plugin

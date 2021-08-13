@@ -1,14 +1,15 @@
 package com.camel.taxi;
 
+import com.camel.taxi.Messages.Messages;
 import com.datasonnet.document.DefaultDocument;
 import com.datasonnet.document.Document;
 import com.datasonnet.document.MediaTypes;
-import org.apache.camel.language.datasonnet.DatasonnetExpression;
 import com.ms3_inc.tavros.extensions.rest.OperationResult;
 import com.ms3_inc.tavros.extensions.rest.exception.RestException;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.endpoint.EndpointRouteBuilder;
+import org.apache.camel.language.datasonnet.DatasonnetExpression;
 
 /**
  * This class centralizes exception handling for all Camel routes.  Extend this class for all RouteBuilder classes
@@ -22,6 +23,9 @@ import org.apache.camel.builder.endpoint.EndpointRouteBuilder;
  * @author Maven Archetype (camel-oas-archetype)
  */
 public class BaseRestRouteBuilder extends EndpointRouteBuilder {
+
+    protected Messages msg = new Messages();
+
     protected DatasonnetExpression datasonnetEx(String expression) {
         return (DatasonnetExpression) getContext().resolveLanguage("datasonnet").createExpression(expression);
     }

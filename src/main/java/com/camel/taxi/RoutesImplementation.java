@@ -1,10 +1,6 @@
 package com.camel.taxi;
 
 import com.datasonnet.document.MediaTypes;
-import org.apache.camel.Exchange;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Message;
-import org.apache.camel.Processor;
 import org.apache.camel.language.datasonnet.DatasonnetExpression;
 import org.springframework.stereotype.Component;
 
@@ -21,115 +17,171 @@ public class RoutesImplementation extends BaseRestRouteBuilder {
     public void configure() throws Exception {
         super.configure();
 
-        // TODO: Replace stubs for each endpoint with real implementation. Implementation defaults to a simple response with operation Id.
+        // IMPLEMENTED
         from(direct("get-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders-orderId")
+            .setProperty("orderId", simple("${header.orderId}"))
+            .to(direct("get-orders-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("put-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-orders-orderId")
+            .transform(datasonnetEx("resource:classpath:put-order.ds", String.class))
+            .setProperty("orderId", simple("${header.orderId}"))
+            .setProperty("clientEmail", datasonnetEx("payload.clientEmail", String.class))
+            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
+            .setProperty("price", datasonnetEx("payload.price", String.class))
+            .to(direct("update-order-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("delete-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-orders-orderId")
+            .setProperty("orderId", simple("${header.orderId}"))
+            .to(direct("delete-order-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("patch-orders-orderId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'patch-orders-orderId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:patch-orders-orderId")
+            .setProperty("orderId", simple("${header.orderId}"))
+            .setProperty("driverId", simple("${header.newDriverId}"))
+            .to(direct("change-driver-of-order").getUri())
         ;
+        // IMPLEMENTED
         from(direct("get-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-drivers-driverId")
+            .setProperty("driverId", simple("${header.driverId}"))
+            .to(direct("get-driver-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("put-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-drivers-driverId")
+            .transform(datasonnetEx("resource:classpath:put-driver.ds", String.class))
+            .setProperty("driverId", simple("${header.driverId}"))
+            .setProperty("name", datasonnetEx("payload.name", String.class))
+            .setProperty("password", datasonnetEx("payload.password", String.class))
+            .to(direct("update-driver-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("delete-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-drivers-driverId")
+            .setProperty("driverId", simple("${header.driverId}"))
+            .to(direct("delete-driver-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("get-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-clients-clientId")
+            .to(direct("get-client-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("put-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-clients-clientsId")
+            .transform(datasonnetEx("resource:classpath:create-client-payload.ds", String.class))
+            .setProperty("clientId", simple("${header.clientId}"))
+            .setProperty("name", datasonnetEx("payload.name", String.class))
+            .setProperty("password", datasonnetEx("payload.password", String.class))
+            .to(direct("put-client-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("delete-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-clients-clientId")
+            .setProperty("clientId", simple("${header.clientId}"))
+            .to(direct("delete-client-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("get-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-cars-carId")
+            .setProperty("carId", simple("${header.carId}"))
+            .to(direct("get-car-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("put-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'put-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:put-cars-carId")
+            .transform(datasonnetEx("resource:classpath:put-car.ds", String.class))
+            .setProperty("carId", simple("${header.carId}"))
+            .setProperty("model", datasonnetEx("payload.model", String.class))
+            .setProperty("driverEmail", datasonnetEx("payload.driverEmail", String.class))
+            .to(direct("update-car-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("delete-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'delete-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:delete-cars-carId")
+            .setProperty("carId", simple("${header.carId}"))
+            .to(direct("delete-car-by-id").getUri())
         ;
+        // IMPLEMENTED
         from(direct("patch-cars-carId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'patch-cars-carId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:patch-cars-carId")
+            .setProperty("carId", simple("${header.carId}"))
+            .setProperty("model", simple("${header.model}"))
+            .to(direct("patch-car-by-id"))
         ;
+        // IMPLEMENTED
         from(direct("post-register"))
                 .routeId("direct:post-register")
                 .choice()
                     .when(simple("${header.who} == 'driver'"))
+                        .transform(datasonnetEx("resource:classpath:create-driver-payload.ds", String.class))
+                        .setProperty("name", datasonnetEx("payload.driver.name", String.class))
+                        .setProperty("email", datasonnetEx("payload.driver.email", String.class))
+                        .setProperty("driverEmail", datasonnetEx("payload.driver.email", String.class))
+                        .setProperty("password", datasonnetEx("payload.driver.password", String.class))
+                        .setProperty("model", datasonnetEx("payload.car.model", String.class))
                         .to(direct("register-driver").getUri())
                     .otherwise()
-                        .to(direct("register-client").getUri());
-
-
-//            .log(LoggingLevel.INFO, "Start of ${routeId}")
-//            .
-
-//            .setBody(DatasonnetExpression.builder("{opId: 'post-register'}", String.class)
-//                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+                        .transform(datasonnetEx("resource:classpath:create-client-payload.ds", String.class))
+                        .setProperty("name", datasonnetEx("payload.name", String.class))
+                        .setProperty("email", datasonnetEx("payload.email", String.class))
+                        .setProperty("clientEmail", datasonnetEx("payload.email", String.class)) // stupid solution, but I am too lazy to change it
+                        .setProperty("password", datasonnetEx("payload.password", String.class))
+                        .to(direct("register-client").getUri())
         ;
         from(direct("post-login"))
             .setBody(DatasonnetExpression.builder("{opId: 'post-login'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("get-orders"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders")
+            .to(direct("get-all-orders").getUri())
         ;
+        // IMPLEMENTED
         from(direct("post-orders"))
-            .setBody(DatasonnetExpression.builder("{opId: 'post-orders'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:post-orders")
+            .setProperty("clientId", simple("${header.clientId}"))
+            .setProperty("driverId", simple("${header.driverId}"))
+            .setProperty("price", simple("${random(50, 101)}"))
+            .to(direct("create-order").getUri())
         ;
+        // IMPLEMENTED
         from(direct("get-drivers"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-drivers'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-drivers")
+            .to(direct("get-all-drivers").getUri())
         ;
         from(direct("get-test"))
             .setBody(DatasonnetExpression.builder("{opId: 'get-test'}", String.class)
                     .outputMediaType(MediaTypes.APPLICATION_JSON))
         ;
+        // IMPLEMENTED
         from(direct("get-orders-drivers-driverId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders-drivers-driverId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders-drivers-driverId")
+            .setProperty("driverId", simple("${header.driverId}"))
+            .to(direct("get-orders-by-driverId"))
         ;
+        // IMPLEMENTED
         from(direct("get-orders-clients-clientId"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-orders-clients-clientId'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-orders-clients-clientId")
+            .setProperty("clientId", simple("${header.clientId}"))
+            .to(direct("get-orders-by-clientId"))
         ;
-        // testing endpoint
+        // IMPLEMENTED
         from(direct("get-clients"))
                 .routeId("direct:get-clients")
-                .to(sql("classpath:select-clients.sql"))
-                .transform(datasonnet("payload", String.class))
+                .to(direct("retrieve-all-clients").getUri())
         ;
+        // IMPLEMENTED
         from(direct("get-cars"))
-            .setBody(DatasonnetExpression.builder("{opId: 'get-cars'}", String.class)
-                    .outputMediaType(MediaTypes.APPLICATION_JSON))
+            .routeId("direct:get-cars")
+            .to(direct("get-all-cars").getUri())
         ;
 
     }
